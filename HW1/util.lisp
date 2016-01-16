@@ -1,3 +1,5 @@
+;; Have a runtime flag that asks whether the user wants to run random search or depth first or breadth first search
+
 ;; This is a file that contains utility functions that are commonly used by the other parts of my code :)
 
 ;; replace-all - Replaces all occurences of 'part' in 'string' by the 'replacement'
@@ -16,6 +18,7 @@
             when pos do (write-string replacement out)
             while pos)))
 
+
 ;; string-to-list - Converts a string to a list
 ;; Input: str - string to be converted
 ;; Output: a list 
@@ -27,3 +30,4 @@
                nil)))
 ;; Test:
 ;; (write (string-to-list (replace-all "1,2,3," "," " ")))
+
