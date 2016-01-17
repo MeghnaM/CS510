@@ -34,8 +34,8 @@
 
 
 ;; cloneGameState - this function deep copies the current game state into the variable clonedstate
-(defun clonedGameState ()
-  (copy-list *currentstate*))
+(defun clonedGameState (currentstate)
+  (copy-list currentstate))
 ;; Test:
 ;; (setf test (clonedGameState))
 ;; (print test)

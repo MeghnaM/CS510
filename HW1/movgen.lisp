@@ -1,4 +1,3 @@
-
 (load "util.lisp")
 (load "staterep.lisp")
 
@@ -21,10 +20,10 @@
         (coord (nth i side) (nth i side))
         (x (nth 1 coord) (nth 1 coord))
         (y (nth 0 coord) (nth 0 coord))
-        (up nil))
+        (up t))
     ((or (>= i (length side)) (<= y 0)) up)
-    (if (member (nth x (nth (- y 1) state)) valid)
-      (setf up t))))
+    (if (not (member (nth x (nth (- y 1) state)) valid))
+      (setf up nil))))
 
 ;; Test:
 ;; (setf state (loadGameState "SBP-level0.txt"))
@@ -36,10 +35,10 @@
         (coord (nth i side) (nth i side))
         (x (nth 1 coord) (nth 1 coord))
         (y (nth 0 coord) (nth 0 coord))
-        (down nil))
+        (down t))
     ((or (>= i (length side)) (>= y (length state))) down)
-    (if (member (nth x (nth (+ y 1) state)) valid)
-      (setf down t))))
+    (if (not (member (nth x (nth (+ y 1) state)) valid))
+      (setf down nil))))
 
 
 (defun checkright (state side valid)
@@ -47,10 +46,10 @@
         (coord (nth i side) (nth i side))
         (x (nth 1 coord) (nth 1 coord))
         (y (nth 0 coord) (nth 0 coord))
-        (right nil))
+        (right t))
     ((or (>= i (length side)) (>= x (length (nth 1 state))) right))
-    (if (member (nth (+ x 1) (nth y state)) valid)
-      (setf right t))))
+    (if (not (member (nth (+ x 1) (nth y state)) valid))
+      (setf right nil))))
 
 
 (defun checkleft (state side valid)
@@ -58,10 +57,10 @@
         (coord (nth i side) (nth i side))
         (x (nth 1 coord) (nth 1 coord))
         (y (nth 0 coord) (nth 0 coord))
-        (left nil))
+        (left t))
     ((or (>= i (length side)) (<= x 0)) left)
-    (if (member (nth (- x 1) (nth y state)) valid)
-      (setf left t))))
+    (if (not (member (nth (- x 1) (nth y state)) valid))
+      (setf left nil))))
 
 
 (defun minmaxlist (l)
@@ -108,9 +107,79 @@
       (push (list piece "up") piecemoves)))
   piecemoves))
 
-;; (defun sort (moves))
+;; Test:
+;; (setf currentstate (loadGameState "SBP-level1.txt"))
+;; (outputGameState)
+;; (format t "~a~%" (allMovesHelp currentstate 3))
 
-(setf currentstate (loadGameState "SBP-level1.txt"))
-(outputGameState)
-(format t "~a~%" (allMovesHelp currentstate 3))
 
+(defun allMoves (currentstate) 
+  (let ((elements nil)
+        (allmoves nil))
+    (dolist (row (cdr currentstate))
+      (dolist (elem row)
+        (if (and (not (member elem elements))
+                 (not (eql -1 elem))
+                 (not (eql 0 elem))
+                 (not (eql 1 elem)))
+          (push elem elements))))
+    (dolist (x elements)
+      (if (allMovesHelp currentstate x)
+        (setf allmoves (append (allMovesHelp currentstate x) allmoves))))
+    (setf allmoves (sort allmoves #'< :key #'car))))
+
+;; Test:
+;; (setf currentstate (loadGameState "SBP-level3.txt"))
+;; (outputGameState)
+;; (format t "~a~%" (allMoves currentstate))
+
+(defun moveup (state piececoords piece)
+  (dolist (pc piececoords)
+    (setf (nth (cadr pc) (nth (car pc) state)) 0))
+  (dolist (pc piececoords)
+    (setf (nth (cadr pc) (nth (- (car pc) 1) state)) piece)))
+
+(defun movedown (state piececoords piece)
+  (dolist (pc piececoords)
+    (setf (nth (cadr pc) (nth (car pc) state)) 0))
+  (dolist (pc piececoords)
+    (setf (nth (cadr pc) (nth (+ (car pc) 1) state)) piece)))
+
+(defun moveleft (state piececoords piece)
+  (dolist (pc piececoords)
+    (setf (nth (cadr pc) (nth (car pc) state)) 0))
+  (dolist (pc piececoords)
+    (setf (nth (- (cadr pc) 1) (nth (car pc) state)) piece)))
+
+(defun moveright (state piececoords piece)
+  (dolist (pc piececoords)
+    (setf (nth (cadr pc) (nth (car pc) state)) 0))
+  (dolist (pc piececoords)
+    (setf (nth (+ (cadr pc) 1) (nth (car pc) state)) piece)))
+
+(defun applyMove (currentstate move)
+  (let ((piececoords (coordinates currentstate (car move))))
+        (if (equal "up" (cadr move))
+          (moveup currentstate piececoords (car move)))
+        (if (equal "down" (cadr move))
+          (movedown currentstate piececoords (car move)))
+        (if (equal "left" (cadr move))
+          (moveleft currentstate piececoords (car move)))
+        (if (equal "right" (cadr move))
+          (moveright currentstate piececoords (car move))))
+  currentstate)
+
+;; Test:
+;; (setf currentstate (loadGameState "SBP-level0.txt"))
+;; (outputGameState) (setf x (allMoves currentstate))
+;; (format t "~a~%" (applyMove currentstate (car x)))
+
+
+(defun applyMoveCloning (currentstate move)
+  (setf clonedstate (clonedGameState currentstate))
+  (setf newstate (applyMove currentstate move)))
+
+;; Test:
+;; (setf currentstate (loadGameState "SBP-level0.txt"))
+;; (outputGameState) (setf x (allMoves currentstate))
+;; (format t "~a~%" (applyMoveCloning currentstate (car x)))
