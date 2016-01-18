@@ -26,8 +26,8 @@
 ;; outputGameState - prints the current game state to the terminal 
 ;; Input: 
 ;; Output: the current game state formatted to look like it did in the original text file
-(defun outputGameState ()
-  (loop for row on *currentstate*
+(defun outputGameState (currentstate)
+  (loop for row on currentstate
         do (format t "~{~a,~}~%" (car row))))  
 ;; Test:
 ;; (outputGameState)

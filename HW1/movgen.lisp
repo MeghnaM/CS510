@@ -138,6 +138,10 @@
     (setf (nth (cadr pc) (nth (car pc) state)) 0))
   (dolist (pc piececoords)
     (setf (nth (cadr pc) (nth (- (car pc) 1) state)) piece)))
+    ;(let ((new-x (cadr pc))
+     ;     (new-y (- (car pc) 1)))
+      ;(format t "~a~%" (list new-y new-x))
+      ;(setf (nth new-x (nth new-y state)) piece))))
 
 (defun movedown (state piececoords piece)
   (dolist (pc piececoords)
@@ -169,15 +173,24 @@
           (moveright currentstate piececoords (car move))))
   currentstate)
 
-;; Test:
-;; (setf currentstate (loadGameState "SBP-level0.txt"))
-;; (outputGameState) (setf x (allMoves currentstate))
-;; (format t "~a~%" (applyMove currentstate (car x)))
-
-
 (defun applyMoveCloning (currentstate move)
   (setf clonedstate (clonedGameState currentstate))
   (setf newstate (applyMove currentstate move)))
+
+;; Test:
+;; (setf currentstate (loadGameState "SBP-level1.txt"))
+;; (outputGameState currentstate) 
+;; (setf x (allMoves currentstate))
+;; (setf newstate (applyMoveCloning currentstate (list 4 "left")))
+;; (outputGameState newstate)
+;; (setf newstate (applyMoveCloning newstate (list 6 "up")))
+;; (outputGameState newstate)
+
+;; (setf newstate (applyMoveCloning newstate (list 4 "down")))
+;; (outputGameState newstate)
+
+;; (setf newstate (applyMoveCloning newstate (list 6 "down")))
+;; (outputGameState newstate)
 
 ;; Test:
 ;; (setf currentstate (loadGameState "SBP-level0.txt"))

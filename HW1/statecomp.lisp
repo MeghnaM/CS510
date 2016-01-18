@@ -31,9 +31,9 @@
         (cond ((= (nth j (nth i state)) idx1) (setf (nth j (nth i state)) idx2))
               ((= (nth j (nth i state)) idx2) (setf (nth j (nth i state)) idx1)))))))
 
-;(defun lprint (lst)
-;  (dolist (x lst)
-;    (print x)))
+;;(defun prettyprint (lst)
+ ;; (dolist (x lst)
+  ;;  (print x)))
 
 (defun normalizeState (currentstate)
   (let ((nextidx 3)
@@ -50,9 +50,9 @@
                    (setf nextidx (1+ nextidx)))))))))
 
 ;; Test:
-(setf currentstate (loadGameState "SBP-test-not-normalized.txt"))
-(print currentstate)
-;(format t "~a~%" (swapIdx currentstate 12 91))
-(print "")
-(normalizeState currentstate)
-(print currentstate)
+;; (setf currentstate (loadGameState "SBP-test-not-normalized.txt"))
+;; (print currentstate)
+;; (format t "~a~%" (swapIdx currentstate 12 91))
+;; (print "")
+;; (normalizeState currentstate)
+;; (print currentstate)
