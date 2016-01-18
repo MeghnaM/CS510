@@ -25,5 +25,5 @@
           (setf n (- n 1)))))
 
 ;; Test:
-;; (setf currentstate (loadGameState "SBP-level1.txt"))
-;; (randwalk currentstate 3)
+(setf currentstate (loadGameState "SBP-level1.txt"))
+(randwalk currentstate 3)
