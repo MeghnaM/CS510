@@ -2,4 +2,11 @@ Meghna Malhotra
 CS 510 - HW 3
 2.14.'16
 
-Please type 'make' to execute the code. 
+Please type the commands in the following order:
+make                    // to build the code
+cd java-othello-src     // to go into the directory where the code will be executed from 
+java cs380.othello.Test // to execute the code 
+
+If you would like to change the depth of Minimax search or the number of
+iterations for Monte Carlo Tree Search, please edit the main function in the
+file Test.java.  
